@@ -1,0 +1,74 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "el_countdown_9xV9PF": {
+      "type": "el-countdown",
+      "name": "El Countdown",
+      "settings": {
+        "layout": "full",
+        "image": "shopify://shop_images/slidev3_1.jpg",
+        "preheading": "New in",
+        "heading": "Heading",
+        "subheading": "<p>Sale Off 30%</p>",
+        "time": "",
+        "button_label": "Buy it now",
+        "button_link": "shopify://collections/all",
+        "button_style": "primary",
+        "max_width": 600,
+        "image_height": "h-600",
+        "heading_size": 40,
+        "heading_size_mobile": 28,
+        "text_alignment": "el-text-left",
+        "use_custom_colors": false,
+        "color_text": "#000000",
+        "color_background": "#ffffff",
+        "use_overlay": false,
+        "colors_overlay": "#ffffff",
+        "overlay_opacity": 0.3,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "image_height_mobile": "h-mb-400"
+      }
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "all",
+        "products_to_show": 8,
+        "title": "Featured products",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 4,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-1",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 44,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "el_countdown_9xV9PF",
+    "featured_collection"
+  ]
+}

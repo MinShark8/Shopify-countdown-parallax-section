@@ -1,0 +1,427 @@
+{{ 'jarallax.min.js' | asset_url | preload_tag: as: 'script' }}
+<script src="{{ 'jarallax.min.js' | asset_url }}" defer="defer"></script>
+{{ 'el-countdown.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'coundown.js' | asset_url }}" defer></script>
+<script src="{{ 'el-countdown.js' | asset_url }}" defer></script>
+{% style %}
+  .section-extras-margin-{{ section.id }} {
+  margin-top: {{ section.settings.margin_top }}px;
+  margin-bottom: {{ section.settings.margin_bottom }}px;
+  }
+  {% if section.settings.use_custom_colors %}
+    .section-extras-color-{{ section.id }} {
+    --color-background: {{ section.settings.color_background }};
+    --color-foreground: {{ section.settings.color_text }};
+    }
+  {% endif %}
+  {% if section.settings.use_overlay %}
+    .card-overlay-{{ section.id }} {
+    --color-overlay: {{ section.settings.colors_overlay.red }}, {{ section.settings.colors_overlay.green }}, {{ section.settings.colors_overlay.blue }};
+    --color-overlay-opacity: {{ section.settings.overlay_opacity }};
+    }
+  {% endif %}
+  .heading-{{ section.id }}{
+  --heading-size: {{ section.settings.heading_size }}px;
+  --heading-size-mobile: {{ section.settings.heading_size_mobile }}px;
+  }
+{% endstyle %}
+<div
+        class="position-relative overflow-hidden {% if section.settings.show_border %} have-border-bottom{% endif %}
+    card-banner-parallax section-extras-margin section-extras-margin-{{ section.id }}
+  "
+>
+  <div class="{{ section.settings.layout }} position-relative">
+    <div
+            class="overflow-hidden"
+    >
+      <div
+              class="jarallax position-relative overflow-hidden card-img-custom-height {{ section.settings.image_height_mobile }} {{ section.settings.image_height }}"
+              data-jarallax data-speed="0.5" data-type="scroll"
+      >
+        <div class="card-img-top lh-0 d-block overflow-hidden{% if section.settings.use_overlay %} card-overlay card-overlay-{{ section.id }}{% endif %}" >
+          {% if section.settings.button_link %}
+            <a class="full-width-link" aria-label="{{ section.settings.heading }}" href="{{ section.settings.button_link }}">
+              <span class="visually-hidden">{{ section.settings.heading }}</span>
+            </a>
+          {% endif %}
+          {% if section.settings.image != blank %}
+            <div class="media-wrap">
+              {{ section.settings.image
+              | image_url: width: 1920
+              | image_tag:
+              class: 'jarallax-img',
+              loading: 'eager',
+              fetchpriority: 'high'
+              }}
+
+            </div>
+          {% else %}
+            <div class="media-wrap">
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg bg-body-tertiary' }}
+            </div>
+          {% endif %}
+        </div>
+        <div class="cs-card-body position-absolute {{ section.settings.text_alignment }}" style="max-width: {{ section.settings.max_width }}px">
+          <div class="cs-card-body-inner{% if section.settings.use_custom_colors %} section-extras-color section-extras-color-{{ section.id }}{% endif %}">
+            <div class="card-top">
+              {% if section.settings.preheading or section.settings.heading or section.settings.subheading %}
+                <div class="heading heading-wrap">
+                  {% if section.settings.preheading != blank %}
+                    <p class="el-preheading">
+                      {{ section.settings.preheading }}
+                    </p>
+                  {% endif %}
+                  {% if section.settings.heading %}
+                   <h2 class="el-heading heading-{{ section.id }}">{{ section.settings.heading }}</h2>
+                  {% endif %}
+                  {% if section.settings.subheading != blank %}
+                    <div class="el-text rte">
+                      {{ section.settings.subheading }}
+                    </div>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+            {% if section.settings.time != '' %}
+              <div class="countdown-wrap">
+                <countdown-timer class="js-time time-lg position-relative">
+                  <input id="js-date1" name="time-code1" class="visually-hidden js-date" aria-label="{{ section.settings.time }}" type="date" value="{{ section.settings.time }}">
+                  <p class="mb-0 js-countdown"></p>
+                </countdown-timer>
+              </div>
+            {% endif %}
+            {% if section.settings.button_link and section.settings.button_label != blank %}
+              <div class="card-bottom">
+                <a
+                        {% if section.settings.button_link == blank %}
+                          role="link" aria-disabled="true"
+                        {% else %}
+                          href="{{ section.settings.button_link }}"
+                        {% endif %}
+                        class="btn btn-{{ section.settings.button_style }} position-relative"
+                >
+                  <span>{{- section.settings.button_label | escape -}}</span>
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "El Countdown",
+  "tag": "section",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "options": [
+        {
+          "value": "full",
+          "label": "Fullwidth"
+        },
+        {
+          "value": "page-width-desktop",
+          "label": "Container"
+        }
+      ],
+      "default": "full",
+      "label": "Style container"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Parallax"
+    },
+    {
+      "type": "text",
+      "id": "preheading",
+      "default": "New in",
+      "label": "Preheading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "default": "<p>Sale Off 30%</p>",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "time",
+      "label": "Time"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "Buy it now",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "default": "/collections/all",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "light",
+          "label": "White"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ],
+      "default": "primary",
+      "label": "Button style"
+    },
+    {
+      "type": "header",
+      "content": "Settings"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 300,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "label": "Max width",
+      "default": 600
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "options": [
+        {
+          "value": "h-300",
+          "label": "300px"
+        },
+        {
+          "value": "h-350",
+          "label": "350px"
+        },
+        {
+          "value": "h-400",
+          "label": "400px"
+        },
+        {
+          "value": "h-450",
+          "label": "450px"
+        },
+        {
+          "value": "h-500",
+          "label": "500px"
+        },
+        {
+          "value": "h-550",
+          "label": "550px"
+        },
+        {
+          "value": "h-600",
+          "label": "600px"
+        },
+        {
+          "value": "h-650",
+          "label": "650px"
+        },
+        {
+          "value": "h-700",
+          "label": "700px"
+        },
+        {
+          "value": "h-800",
+          "label": "800px"
+        }
+      ],
+      "default": "h-800",
+      "label": "Image height"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 16,
+      "max": 100,
+      "step": 2,
+      "default": 40,
+      "unit": "px",
+      "label": "Heading size"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 16,
+      "max": 100,
+      "step": 2,
+      "default": 28,
+      "unit": "px",
+      "label": "Heading size mobile"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "text alignment",
+      "options": [
+        {
+          "value": "el-text-left",
+          "label": "Left"
+        },
+        {
+          "value": "el-text-center",
+          "label": "Center"
+        },
+        {
+          "value": "el-text-right",
+          "label": "Right"
+        }
+      ],
+      "default": "el-text-left"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_colors",
+      "default": false,
+      "label": "Use custom colors"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Color text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "color_background",
+      "label": "Color background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_overlay",
+      "default": false,
+      "label": "Use overlay"
+    },
+    {
+      "type": "color",
+      "id": "colors_overlay",
+      "label": "Colors overlay",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Overlay opacity",
+      "default": 0.3
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin bottom",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "select",
+      "id": "image_height_mobile",
+      "options": [
+        {
+          "value": "h-mb-300",
+          "label": "300px"
+        },
+        {
+          "value": "h-mb-350",
+          "label": "350px"
+        },
+        {
+          "value": "h-mb-400",
+          "label": "400px"
+        },
+        {
+          "value": "h-mb-450",
+          "label": "450px"
+        },
+        {
+          "value": "h-mb-500",
+          "label": "500px"
+        },
+        {
+          "value": "h-mb-550",
+          "label": "550px"
+        },
+        {
+          "value": "h-mb-600",
+          "label": "600px"
+        },
+        {
+          "value": "h-mb-650",
+          "label": "650px"
+        }
+      ],
+      "default": "h-mb-400",
+      "label": "Image height mobile"
+    }
+  ],
+  "presets": [
+    {
+      "name": "El Countdown"
+    }
+  ]
+}
+{% endschema %}
